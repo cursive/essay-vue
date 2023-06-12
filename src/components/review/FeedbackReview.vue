@@ -5,6 +5,7 @@
         <h2>Essay feedback</h2>
         <div v-for="feedback in computedFeedbacks" :key="feedback.id" :class="['feedback', 'score' + feedback.score, {
             'approved': feedback.isApproved,
+            'editing': feedback.isEditing,
         }]">
 
 
@@ -19,6 +20,8 @@
                 <i class="approve ph ph-check" @click="approveFeedback(feedback)"></i>
             </div>
         </div>
+
+
     </div>
 </template>
 
@@ -37,16 +40,22 @@ const computedFeedbacks = computed(() => store.getFeedbacks);
 
 
 
+
+
 const approveFeedback = (feedback) => {
     feedback.isApproved = true;
     console.log('approve');
 };
 const editFeedback = (feedback) => {
+    feedback.isApproved = false;
+    feedback.isEditing = true;
     console.log('editFeedback');
 };
 const updateFeedback = (feedback) => {
     console.log('editFeedback');
 };
+
+
 
 </script>
 <style lang="scss" scoped>
@@ -94,37 +103,80 @@ const updateFeedback = (feedback) => {
 
     }
 
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        margin-top: 4px;
 
-}
+        i {
+            border-radius: 100%;
+            padding: 8px;
+            // background-color: #fff000;
+            transform-origin: center;
 
-.buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    margin-top: 4px;
+            &:hover {
+                cursor: pointer;
+                background-color: rgba($color: #000000, $alpha: 0.1)
+            }
+        }
 
-    i {
-        border-radius: 100%;
-        padding: 8px;
-        // background-color: #fff000;
-        transform-origin: center;
+        .thumbsup {
+            display: block;
+        }
 
-        &:hover {
-            cursor: pointer;
-            background-color: rgba($color: #000000, $alpha: 0.1)
+
+        .approve {
+            display: none;
         }
     }
 
-    .thumbsup {
-        display: block;
+    &.editing {
+        .buttons {
+            .thumbsup {
+                display: none;
+            }
+
+
+            .approve {
+                display: block;
+            }
+        }
     }
 
-    .thumbsdown {
-        display: block;
+    &.approved {
+        .buttons {
+            .thumbsup {
+                display: none;
+            }
+
+
+            .approve {
+                display: none;
+            }
+        }
     }
 
-    .approve {
-        display: none;
+
+}
+
+.bigButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 32px;
+    width: 276px;
+    height: 56px;
+
+    color: white;
+
+    background-size: 200% 100%;
+    border-radius: 6px;
+    background-color: $blue;
+
+    &.disabled {
+        background-color: #333333;
     }
 }
 </style>

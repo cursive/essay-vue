@@ -34,12 +34,23 @@ export const useMainStore = defineStore('promptStore', {
         comments: [],
         prompts: [],
         activePrompt: 0,
-        loaded: false
+        loaded: false,
+        displayRubric: false,
+        isReviewed: false
     }),
     getters: {
         getEssay: (state) => state.essay,
         getFeedbacks: (state) => state.feedbacks,
         getComments: (state) => state.comments,
+        isAllReviewed: function () {
+            // Check if all feedbacks and comments have been reviewed
+            return (
+                (this.feedbacks.length === 0 || this.feedbacks.every((feedback) => feedback.isApproved || feedback.isRejected)) &&
+                (this.comments.length === 0 || this.comments.every((comment) => comment.isApproved || comment.isRejected))
+            );
+        }, isReviewed: function () {
+            return this.isAllReviewed;
+        }
     },
 
     actions: {
@@ -94,6 +105,10 @@ export const useMainStore = defineStore('promptStore', {
                     console.error('Error fetching prompts:', error);
                 });
         },
+        toggleRubric() {
+            console.log("toggle rubric")
+            this.displayRubric = !this.displayRubric
+        }
     },
 });
 
@@ -138,6 +153,7 @@ function cleanupData(data) {
         const feedbacks = overall.map((feedback) => ({
             id: generateUniqueID(),
             ...feedback,
+            isEditing: false,
             isApproved: false,
         }));
 

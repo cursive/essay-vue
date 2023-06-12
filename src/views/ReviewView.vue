@@ -19,6 +19,7 @@
       </div>
     </div>
   </div>
+  <RubricReview v-show="store.displayRubric" />
 </template>
 
 <script setup>
@@ -31,6 +32,10 @@ import EssayReview from '@/components/review/EssayReview.vue'
 import FeedbackReview from '@/components/review/FeedbackReview.vue'
 import StartReview from '@/components/review/StartReview.vue'
 import CommentsReview from '@/components/review/CommentsReview.vue'
+import RubricReview from '@/components/review/RubricReview.vue'
+
+import { useMainStore } from '@/stores/store-prompts';
+const store = useMainStore();
 
 
 </script>

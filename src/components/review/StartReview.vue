@@ -1,12 +1,32 @@
 <template>
-    <div class="start">
+    <div class="start" v-if="!store.loaded">
         <h3>Pre review</h3>
         <p>We can take a first pass at review using the
-            <span class="showrubric">this rubric</span> to call out what matters to you.
+            <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
+                Rubrics Grades 9 - 10</a> to call
+            out what matters to you.
         </p>
 
         <!-- <div @click="handleButtonClick()" :class="['bigButton', { loading }]"></div> -->
-        <div @click="handleButtonClick()" :class="['bigButton', { loading: loadingComputed, loaded }]"></div>
+        <div @click="handleButtonClick()" :class="['bigButton', {
+            loading: loadingComputed, loaded,
+            'loaded': store.loaded
+        }]"></div>
+
+    </div>
+
+    <div class="start" v-if="store.loaded">
+        <h3>Pre review</h3>
+        <p>We can take a first pass at review using the
+            <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
+                Rubrics Grades 9 - 10</a> to call
+            out what matters to you.
+        </p>
+        <p>You can submit to your student once you've gone through all the comments and fedback
+        </p>
+
+        <!-- <div @click="handleButtonClick()" :class="['bigButton', { loading }]"></div> -->
+        <div :class="['bigButton']">Send to </div>
 
     </div>
 </template>
@@ -17,7 +37,7 @@ import { ref, watch, computed } from 'vue';
 
 const store = useMainStore();
 const loading = ref(false);
-const loaded = ref(false);
+// const loaded = ref(false);
 
 // Computed property to track the loading state
 const loadingComputed = computed(() => {
@@ -31,11 +51,16 @@ function handleButtonClick() {
     button.removeEventListener('click', handleButtonClick);
 }
 
+function toggleRubricReview() {
+    console.log('toggleRubricReview');
+    store.toggleRubric();
+}
+
 // Watch for changes in store.loaded
 watch(() => store.loaded, (value) => {
-    if (value) {
-        loading.value = false;
-    }
+    // if (value) {
+    //     loading.value = false;
+    // }
 });
 
 </script>
@@ -54,7 +79,6 @@ watch(() => store.loaded, (value) => {
 
         &:hover {
             text-decoration: underline;
-            font-weight: bold;
             cursor: pointer;
         }
     }
@@ -123,6 +147,7 @@ watch(() => store.loaded, (value) => {
         }
 
     }
+
 
 }
 
