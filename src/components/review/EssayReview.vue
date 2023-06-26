@@ -44,11 +44,11 @@ const hoverOff = () => {
 const highlightedEssay = computed(() => {
     let essay = store.getEssay;
     // console.log('Original essay:', essay);
-    console.log('highlightedEssay:');
+    // console.log('highlightedEssay:');
     let commentCounter = 0;
     store.comments.forEach((comment) => {
         commentCounter++;
-        console.log('commentCounter: ' + commentCounter);
+        // console.log('commentCounter: ' + commentCounter);
         const hoveringClass = comment.isHovering ? 'hovering' : '';
         const spanClass = `quote score${comment.score} ${hoveringClass}`;
         const spanContent = comment.quote;
@@ -116,6 +116,11 @@ const highlightedEssay = computed(() => {
 
     &.rejected {
         background-color: #ffffff !important;
+    }
+
+    //Haven't figred out how to make this work yet
+    &.approved {
+        background-color: #d9dde7 !important;
     }
 
     filter: brightness(104%);

@@ -1,5 +1,6 @@
 <template>
-  <NavAdmin />
+  <!-- <NavAdmin /> This was the UI for picking a prompt-->
+
   <NavReview />
   <div class="centered">
     <HeaderReview />

@@ -8,16 +8,31 @@
             'editing': feedback.isEditing,
         }]">
 
-
-            <h3>
+            <div class="header">
+                <img class="avatar migo" src="@/assets/migo.png">
+                <img class="avatar teacher" src="@/assets/teacher.png">
                 {{ feedback.dimension }}: {{ feedback.score }}
+            </div>
+            <h3>
+                <!-- {{ feedback.dimension }}: {{ feedback.score }} -->
             </h3>
-            <p contenteditable="true" @click="editFeedback(feedback)" @input="updateFeedback(feedback)">
+            <div class="feedback-text" contenteditable="true" @click="editFeedback(feedback)"
+                @input="updateFeedback(feedback)">
                 {{ feedback.feedback }}
-            </p>
+                <div class="innerKey"></div>
+            </div>
+
             <div class="buttons">
-                <i class="thumbsup ph ph-thumbs-up" @click="approveFeedback(feedback)"></i>
-                <i class="approve ph ph-check" @click="approveFeedback(feedback)"></i>
+
+
+                <div class="button confirm" @click="approveFeedback(feedback)">
+                    <i class="ph ph-check"></i>
+                    <div class="label">Confirm</div>
+                </div>
+                <div class="button edit" @click="editFeedback(feedback, $event)">
+                    <i class="ph ph-pencil"></i>
+                    <div class="label">Edit</div>
+                </div>
             </div>
         </div>
 
@@ -44,15 +59,21 @@ const computedFeedbacks = computed(() => store.getFeedbacks);
 
 const approveFeedback = (feedback) => {
     feedback.isApproved = true;
-    console.log('approve');
+    feedback.isEditing = false;
+    console.log('approveFeedback');
 };
-const editFeedback = (feedback) => {
+const editFeedback = (feedback, event) => {
     feedback.isApproved = false;
     feedback.isEditing = true;
+    if (event) {
+        const fb = event.target.parentNode.parentNode.parentNode
+        const innerKey = fb.querySelector('.innerKey');
+        innerKey.parentNode.focus();
+    }
     console.log('editFeedback');
 };
 const updateFeedback = (feedback) => {
-    console.log('editFeedback');
+    console.log('updateFeedback');
 };
 
 
@@ -65,14 +86,32 @@ const updateFeedback = (feedback) => {
     padding-bottom: 48px;
 }
 
+
+
 .feedback {
     background-color: #e2f1e2;
 
+    * {
+        transition: 300ms;
+    }
+
     padding: 24px;
 
-    &.approved {
-        background-color: #e2e8f1;
+    .avatar {
+        transform-origin: center;
+
+        &.migo {
+            padding-left: 8px;
+        }
+
+        &.teacher {
+            margin-left: -36px;
+            scale: 0;
+            margin-right: 16px;
+        }
     }
+
+
 
     &:first-of-type {
         border-top-right-radius: 16px;
@@ -86,7 +125,7 @@ const updateFeedback = (feedback) => {
 
     margin-bottom: 2px;
 
-    p {
+    .feedback-text {
         padding: 8px;
         border-radius: 8px;
 
@@ -108,51 +147,89 @@ const updateFeedback = (feedback) => {
         flex-direction: row;
         gap: 8px;
         margin-top: 4px;
+        padding: 4px;
 
-        i {
-            border-radius: 100%;
-            padding: 8px;
-            // background-color: #fff000;
-            transform-origin: center;
+        .button {
+            border-radius: 8px;
+            padding: 4px 8px 4px 8px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
 
             &:hover {
                 cursor: pointer;
                 background-color: rgba($color: #000000, $alpha: 0.1)
             }
-        }
 
-        .thumbsup {
-            display: block;
-        }
+            .label {
+                color: #111111;
+                font-size: 14px;
+            }
 
+            i {}
 
-        .approve {
-            display: none;
+            &.confirm {
+                display: none;
+            }
         }
     }
+
 
     &.editing {
         .buttons {
-            .thumbsup {
+            .edit {
                 display: none;
             }
 
 
-            .approve {
-                display: block;
+            .confirm {
+                display: flex;
             }
         }
     }
 
+
+    // Color code the scores
+    &.score1 {
+        background-color: $lightred;
+    }
+
+    &.score2 {
+        background-color: $lightred;
+    }
+
+    &.score3 {
+        background-color: $lightorange;
+    }
+
+    &.score4 {
+        background-color: $lightgreen;
+    }
+
+    &.score5 {
+        background-color: $lightgreen;
+    }
+
     &.approved {
+        background-color: #e2e8f1;
+
+        .migo {
+            scale: 0;
+        }
+
+        .teacher {
+            scale: 1;
+        }
+
         .buttons {
-            .thumbsup {
+            .confirm {
                 display: none;
             }
 
 
-            .approve {
-                display: none;
+            .edit {
+                display: flex;
             }
         }
     }

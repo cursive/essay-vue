@@ -34,7 +34,7 @@ function handleSelectChange() {
     store.setActivePrompt(selectedPromptIndex);
 }
 
-store.getPrompts()
+
 
 
 </script>

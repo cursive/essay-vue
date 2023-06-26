@@ -1,32 +1,22 @@
 <template>
-    <div class="start" v-if="!store.loaded">
+    <div class="panel">
         <h3>Pre review</h3>
-        <p>We can take a first pass at review using the
-            <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
-                Rubrics Grades 9 - 10</a> to call
-            out what matters to you.
-        </p>
 
-        <!-- <div @click="handleButtonClick()" :class="['bigButton', { loading }]"></div> -->
-        <div @click="handleButtonClick()" :class="['bigButton', {
-            loading: loadingComputed, loaded,
-            'loaded': store.loaded
-        }]"></div>
 
-    </div>
-
-    <div class="start" v-if="store.loaded">
-        <h3>Pre review</h3>
-        <p>We can take a first pass at review using the
-            <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
-                Rubrics Grades 9 - 10</a> to call
-            out what matters to you.
-        </p>
-        <p>You can submit to your student once you've gone through all the comments and fedback
-        </p>
-
-        <!-- <div @click="handleButtonClick()" :class="['bigButton', { loading }]"></div> -->
-        <div :class="['bigButton']">Send to </div>
+        <div class="instructions preload" v-if="!store.loaded">
+            <p>We'll take a first pass at reviewing the essay using the <br>
+                <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
+                    Rubrics Grades 9 - 10</a>
+            </p>
+            <div @click="handleButtonClick()" :class="['bigButton', {
+                loading: loadingComputed, loaded,
+                'loaded': store.loaded
+            }]"></div>
+        </div>
+        <div class="instructions loaded" v-if="store.loaded">
+            <p>Review the comments and edit the feedback, then send the review to your student</p>
+            <div class="bigButton" :class="{ 'disabled': !store.isReviewed }"></div>
+        </div>
 
     </div>
 </template>
@@ -37,7 +27,7 @@ import { ref, watch, computed } from 'vue';
 
 const store = useMainStore();
 const loading = ref(false);
-// const loaded = ref(false);
+
 
 // Computed property to track the loading state
 const loadingComputed = computed(() => {
@@ -58,9 +48,9 @@ function toggleRubricReview() {
 
 // Watch for changes in store.loaded
 watch(() => store.loaded, (value) => {
-    // if (value) {
-    //     loading.value = false;
-    // }
+    if (value) {
+        loading.value = false;
+    }
 });
 
 </script>
@@ -68,7 +58,12 @@ watch(() => store.loaded, (value) => {
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";
 
-.start {
+
+.hidden {
+    display: none;
+}
+
+.panel {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 16px;
@@ -98,10 +93,6 @@ watch(() => store.loaded, (value) => {
     background-size: 200% 100%;
     border-radius: 6px;
 
-    &::before {
-        content: 'Review essay';
-    }
-
 
     &:hover {
         text-decoration: underline;
@@ -116,24 +107,6 @@ watch(() => store.loaded, (value) => {
         transition: all 150s ease-out;
         text-decoration: none;
         cursor: default !important;
-
-        &::before {
-            content: 'Analyzing (about 2 mins)...';
-        }
-
-    }
-
-    &.loaded {
-
-        background: #999999;
-        // background-position: left bottom;
-        text-decoration: none;
-        cursor: not-allowed !important;
-
-        &::before {
-            content: 'Submit to student';
-        }
-
     }
 
     &.disabled {
@@ -141,15 +114,34 @@ watch(() => store.loaded, (value) => {
         // background-position: left bottom;
         text-decoration: none;
         cursor: not-allowed !important;
+    }
+}
 
+
+.preload .bigButton {
+    &.loading {
         &::before {
-            content: 'Review essay';
+            content: 'Analyzing (about 2 mins)...';
         }
 
     }
 
+    &::before {
+        content: 'Review essay';
+    }
+}
+
+
+.loaded .bigButton {
+
+    &::before {
+        content: 'Send to student';
+    }
 
 }
+
+
+
 
 @keyframes pulse {
     0% {

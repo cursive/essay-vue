@@ -25,6 +25,10 @@ const computedComments = computed(() => store.getComments);
 @import "@/assets/_variables.scss";
 
 .comments {
+    * {
+        transition: 300ms;
+    }
+
     display: flex;
     flex-direction: column;
     gap: 16px;

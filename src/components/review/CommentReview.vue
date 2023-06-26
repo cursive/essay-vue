@@ -1,7 +1,6 @@
 <template>
     <div :class="['comment', 'score' + comment.score, {
         'approved': isApproved,
-        'rejected': isRejected,
         'editing': isEditing,
         'hovering': isHovering,
     }]" @mouseover="hoverOn" @mouseout="hoverOff">
@@ -9,16 +8,27 @@
             <div class="header">
                 <img class="avatar migo" src="@/assets/migo.png">
                 <img class="avatar teacher" src="@/assets/teacher.png">
-                {{ comment.dimension }}: {{ comment.score }}
+                <div class="dimension">
+                    {{ comment.dimension }}: {{ comment.score }}
+                </div>
             </div>
-            <div class="feedback" contenteditable="true" @click="editComment" @input="updateFeedback">{{ comment.feedback }}
+            <div class="feedback" tabindex="-1" contenteditable="true" @click="editComment" @input="updateFeedback">{{
+                comment.feedback }}
+                <div class="innerKey"></div>
             </div>
             <div class="buttons">
-
-                <!-- <i class="edit ph ph-pencil" @click="editComment"></i> -->
-                <i class="thumbsup ph ph-thumbs-up" @click="approveComment"></i>
-                <i class="thumbsdown ph ph-thumbs-down" @click="rejectComment"></i>
-                <i class="approve ph ph-check" @click="approveComment"></i>
+                <div class="button edit" @click="editComment($event)">
+                    <i class="ph ph-pencil"></i>
+                    <div class="label">Edit</div>
+                </div>
+                <div class="button thumbsdown" @click="rejectComment">
+                    <i class=" ph ph-x"></i>
+                    <div class="label">Reject</div>
+                </div>
+                <div class="button confirm" @click="approveComment">
+                    <i class="ph ph-check"></i>
+                    <div class="label">Confirm</div>
+                </div>
             </div>
         </div>
     </div>
@@ -32,6 +42,14 @@ const props = defineProps({
     comment: Object,
 });
 
+const editComment = (event) => {
+    console.log('editComment', event.target);
+    document.querySelector('.feedback').focus();
+    isEditing.value = true;
+    const comment = event.target.parentNode.parentNode.parentNode
+    const innerKey = comment.querySelector('.innerKey');
+    innerKey.parentNode.focus();
+};
 
 const store = useMainStore();
 const storedComment = store.getComments.find(c => c.id === props.comment.id);
@@ -41,9 +59,8 @@ const isApproved = computed(() => {
     return storedComment ? storedComment.isApproved : false;
 });
 
-const isRejected = computed(() => {
-    return storedComment ? storedComment.isRejected : false;
-});
+
+
 
 const isHovering = computed(() => {
     return storedComment ? storedComment.isHovering : false;
@@ -56,10 +73,7 @@ const hoverOff = () => {
     storedComment.isHovering = false
 };
 
-const editComment = () => {
-    console.log('editComment');
-    isEditing.value = !isEditing.value;
-};
+
 
 const approveComment = () => {
     console.log('approveComment');
@@ -67,9 +81,16 @@ const approveComment = () => {
     store.getComments.find(c => c.id === props.comment.id).isApproved = true;
 };
 
+
+
+
 const rejectComment = () => {
     console.log('rejectComment');
-    store.getComments.find(c => c.id === props.comment.id).isRejected = true;
+
+    const commentIndex = store.getComments.findIndex(c => c.id === props.comment.id);
+    if (commentIndex !== -1) {
+        store.getComments.splice(commentIndex, 1);
+    }
 };
 
 const updateFeedback = (event) => {
@@ -102,18 +123,13 @@ const updateFeedback = (event) => {
     padding: 8px;
     padding-top: 16px;
     padding-right: 8px;
-
     display: flex;
     flex-direction: row;
     gap: 8px;
     border-radius: 16px;
 
-
-
     .avatar {
-
         transform-origin: center;
-
 
         &.migo {
             padding-left: 8px;
@@ -145,7 +161,9 @@ const updateFeedback = (event) => {
         padding-left: 8px;
         padding-right: 8px;
         padding-top: 4px;
+        padding-bottom: 4px;
         border-radius: 8px;
+        margin-top: 4px;
 
         &:hover {
             background-color: rgba($color: #000000, $alpha: 0.05);
@@ -160,39 +178,39 @@ const updateFeedback = (event) => {
     }
 
 
-
+    //edit button
     .buttons {
         display: flex;
         flex-direction: row;
         gap: 8px;
         margin-top: 4px;
+        padding: 4px;
 
-        i {
-            border-radius: 100%;
-            padding: 8px;
-            // background-color: #fff000;
-            transform-origin: center;
+        .button {
+            border-radius: 8px;
+            padding: 4px 8px 4px 8px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
 
             &:hover {
                 cursor: pointer;
                 background-color: rgba($color: #000000, $alpha: 0.1)
             }
-        }
 
-        .thumbsup {
-            display: block;
-        }
+            .label {
+                color: #111111;
+                font-size: 14px;
+            }
 
-        .thumbsdown {
-            display: block;
-        }
+            i {}
 
-        .approve {
-            display: none;
+
         }
     }
 
-
+    // Color code the scores
     &.score1 {
         background-color: $lightred;
     }
@@ -213,23 +231,20 @@ const updateFeedback = (event) => {
         background-color: $lightgreen;
     }
 
+
     &.hovering {
         outline: solid 2px rgba($color: #000000, $alpha: 0.5);
         outline-offset: -2px;
     }
 
-    // &:hover {
-    //     outline: solid 2px rgba($color: #000000, $alpha: 0.5);
-    //     outline-offset: -2px;
-    // }
 
+    //User hovers over hilighted text in the essay
     &.triggeredhover {
-        // border: 5px solid rgba($color: #000000, $alpha: 0.5)
         outline: solid 2px rgba($color: #000000, $alpha: 0.5);
         outline-offset: -2px;
     }
 
-
+    // Status of comment (  editing, approved )
     &.editing {
 
         .buttons.edit,
@@ -243,15 +258,20 @@ const updateFeedback = (event) => {
             }
 
             .thumbsdown {
-                display: none;
+                display: flex;
             }
 
-            .approve {
-                display: block !important;
+            .edit {
+                display: none !important;
+            }
+
+            .confirm {
+                display: flex !important;
                 ;
             }
         }
     }
+
 
     &.approved {
         background-color: #d9dde7;
@@ -272,10 +292,14 @@ const updateFeedback = (event) => {
             }
 
             .thumbsdown {
-                display: none;
+                display: flex;
             }
 
-            .approve {
+            .edit {
+                display: flex;
+            }
+
+            .confirm {
                 display: none;
             }
         }
@@ -283,14 +307,6 @@ const updateFeedback = (event) => {
     }
 
 
-    &.rejected {
-        // opacity: 0;
-        transition: 1300ms;
-        scale: 0;
-        transform-origin: 30% 90%;
-        transition: 300ms;
-        transition-timing-function: cubic-bezier(-1, 0.7, 1.0, 0.1);
-    }
 
 
 
