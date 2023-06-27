@@ -44,11 +44,14 @@ const props = defineProps({
 
 const editComment = (event) => {
     console.log('editComment', event.target);
-    document.querySelector('.feedback').focus();
+    //document.querySelector('.feedback').focus();
     isEditing.value = true;
-    const comment = event.target.parentNode.parentNode.parentNode
-    const innerKey = comment.querySelector('.innerKey');
-    innerKey.parentNode.focus();
+    if (event) {
+
+        const comment = event.target.parentNode.parentNode.parentNode
+        const innerKey = comment.querySelector('.innerKey');
+        innerKey.parentNode.focus();
+    }
 };
 
 const store = useMainStore();

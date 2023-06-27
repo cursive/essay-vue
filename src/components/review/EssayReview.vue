@@ -1,6 +1,6 @@
 <template>
     <div class="essay" @mouseover="hoverOn" @mouseout="hoverOff">
-        <h2>Essay on Paul Bogard's “Let There Be Dark"</h2>
+        <h2>We should Decrease Animal Testing</h2>
 
         <div id="fromStudent">
 
@@ -43,12 +43,9 @@ const hoverOff = () => {
 
 const highlightedEssay = computed(() => {
     let essay = store.getEssay;
-    // console.log('Original essay:', essay);
-    // console.log('highlightedEssay:');
     let commentCounter = 0;
     store.comments.forEach((comment) => {
         commentCounter++;
-        // console.log('commentCounter: ' + commentCounter);
         const hoveringClass = comment.isHovering ? 'hovering' : '';
         const spanClass = `quote score${comment.score} ${hoveringClass}`;
         const spanContent = comment.quote;
@@ -60,10 +57,7 @@ const highlightedEssay = computed(() => {
         // console.log('Regex pattern:', regexPattern);
 
         essay = essay.replace(regexPattern, spanElement);
-        // console.log('Updated essay:', essay);
     });
-
-    // console.log('Final essay:', essay);
     return essay;
 });
 

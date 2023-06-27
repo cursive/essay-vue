@@ -2,7 +2,10 @@
 
 <template>
     <div class="students">
-        <img src="@/assets/Students.png" alt="">
+        <router-link to="/">
+            <img src="@/assets/Students.png" alt="">
+        </router-link>
+
     </div>
 </template>
 
@@ -15,8 +18,13 @@
 @import "@/assets/_variables.scss";
 
 .students {
-    width: 250px;
+    width: 254px;
     border-radius: 8px;
     background-color: $white;
+
+}
+
+img {
+    width: 100%;
 }
 </style>

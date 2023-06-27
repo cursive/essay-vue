@@ -4,7 +4,7 @@
 
 
         <div class="instructions preload" v-if="!store.loaded">
-            <p>We'll take a first pass at reviewing the essay using the <br>
+            <p>We'll take a first pass at reviewing the essay using the
                 <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
                     Rubrics Grades 9 - 10</a>
             </p>
@@ -141,6 +141,10 @@ watch(() => store.loaded, (value) => {
 }
 
 
+
+a {
+    text-decoration: none;
+}
 
 
 @keyframes pulse {

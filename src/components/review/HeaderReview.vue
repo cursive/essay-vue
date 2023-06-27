@@ -4,7 +4,7 @@
     <div class="header">
         <p>Ms Vermont's Class | Essay reviews</p>
         <h2>Emma Buxley</h2>
-        <h4>9th Grade — Read and essay writing</h4>
+        <h4>9th Grade — Argumentative Essay - Animal Testing</h4>
     </div>
 </template>
 
@@ -18,7 +18,7 @@
 
 
 .header {
-    padding-top: 80px;
+    padding-top: 40px;
     padding-bottom: 8px;
     width: 900px;
     padding-left: 200px;
