@@ -1,5 +1,5 @@
 
-
+<!-- A modal that flashes up to show the rubirc, it's state is manged in the store -->
 <template>
     <div class="rubric">
         <div class="header">

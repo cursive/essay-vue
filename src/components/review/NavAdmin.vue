@@ -1,5 +1,5 @@
 
-
+<!-- No longer using this, but you cna sue it to select different prompts -->
 <template>
     <div class="admin">
         <label for="">Prompt: </label>

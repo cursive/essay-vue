@@ -55,7 +55,7 @@ const computedFeedbacks = computed(() => store.getFeedbacks);
 
 
 
-
+//Update the store each make a change so that we cna track if the steacher has reviewed everything
 
 const approveFeedback = (feedback) => {
     feedback.isApproved = true;
@@ -65,6 +65,7 @@ const approveFeedback = (feedback) => {
 const editFeedback = (feedback, event) => {
     feedback.isApproved = false;
     feedback.isEditing = true;
+    //This is used to set keyboard focus on a div
     if (event) {
         const fb = event.target.parentNode.parentNode.parentNode
         const innerKey = fb.querySelector('.innerKey');

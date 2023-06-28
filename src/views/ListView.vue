@@ -1,5 +1,5 @@
 <template>
-  <NavReview />
+  <TopNav />
   <div class="centered">
     <div class="main">
       <div class="left">
@@ -17,12 +17,9 @@
 
 <script setup>
 // @ is an alias to /src
-import NavReview from '@/components/review/NavReview.vue'
+import TopNav from '@/components/review/TopNav.vue'
 
 
-function openessay() {
-  router.push('/list')
-}
 
 
 </script>

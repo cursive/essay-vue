@@ -12,7 +12,13 @@
                     {{ comment.dimension }}: {{ comment.score }}
                 </div>
             </div>
-            <div class="feedback" tabindex="-1" contenteditable="true" @click="editComment" @input="updateFeedback">{{
+            <!-- //This version does tap text to edit but it's a little buggy -->
+            <!-- <div class="feedback" tabindex="-1" contenteditable="true" @click="editComment" @input="updateFeedback">{{
+                comment.feedback }}
+                <div class="innerKey"></div>
+                
+            </div> -->
+            <div class="feedback" tabindex="-1" contenteditable="true" @input="updateFeedback">{{
                 comment.feedback }}
                 <div class="innerKey"></div>
             </div>
@@ -42,17 +48,6 @@ const props = defineProps({
     comment: Object,
 });
 
-const editComment = (event) => {
-    console.log('editComment', event.target);
-    //document.querySelector('.feedback').focus();
-    isEditing.value = true;
-    if (event) {
-
-        const comment = event.target.parentNode.parentNode.parentNode
-        const innerKey = comment.querySelector('.innerKey');
-        innerKey.parentNode.focus();
-    }
-};
 
 const store = useMainStore();
 const storedComment = store.getComments.find(c => c.id === props.comment.id);
@@ -64,16 +59,27 @@ const isApproved = computed(() => {
 
 
 
-
+//Use the store to make the coment and hilighted text switch to hover state
 const isHovering = computed(() => {
     return storedComment ? storedComment.isHovering : false;
 });
+
 
 const hoverOn = () => {
     storedComment.isHovering = true
 };
 const hoverOff = () => {
     storedComment.isHovering = false
+};
+
+const editComment = (event) => {
+    console.log('editComment', event.target);
+    document.querySelector('.innerKey').parentNode.blur();
+    if (event) {
+        const comment = event.target.parentNode.parentNode.parentNode
+        const innerKey = comment.querySelector('.innerKey');
+        innerKey.parentNode.focus();
+    }
 };
 
 
@@ -86,10 +92,9 @@ const approveComment = () => {
 
 
 
-
+//Delete the comment from the store, this will remove it from screen as well as the highlight in the ssay
 const rejectComment = () => {
     console.log('rejectComment');
-
     const commentIndex = store.getComments.findIndex(c => c.id === props.comment.id);
     if (commentIndex !== -1) {
         store.getComments.splice(commentIndex, 1);

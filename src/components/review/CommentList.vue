@@ -1,20 +1,23 @@
 <template>
     <div class="comments">
         <h2>Comments</h2>
-        <CommentReview v-for="comment in computedComments" :key="comment.id" :comment="comment" />
+        <!-- Generate comment bubble based on what's in the state -->
+        <CommentBubble v-for="comment in computedComments" :key="comment.id" :comment="comment" />
     </div>
 </template>
 
 <script setup>
-import CommentReview from './CommentReview.vue'; // Import the Comment component
+import CommentBubble from './CommentBubble.vue'; // Import the Comment component
 import { computed, ref } from 'vue';
 import { useMainStore } from '@/stores/store-prompts';
 
 const store = useMainStore();
+
+//not used, because I switched to computed
 const comments = store.getComments;
 
 
-
+//Computed somehow means the data is reactive
 const computedComments = computed(() => store.getComments);
 
 </script>

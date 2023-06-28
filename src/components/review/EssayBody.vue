@@ -16,6 +16,7 @@ const store = useMainStore();
 
 let hoveringComment = null;
 
+//When you hover overa a highlighted text, update the store so that we can set the corresping comment bubble to hover
 const hoverOn = (event) => {
     const target = event.target;
     if (target.tagName === 'SPAN' && target.classList.contains('quote')) {
@@ -40,7 +41,7 @@ const hoverOff = () => {
     }
 };
 
-
+//Read through all the comments in the store and wrap the relevant text in a span element
 const highlightedEssay = computed(() => {
     let essay = store.getEssay;
     let commentCounter = 0;
@@ -53,9 +54,6 @@ const highlightedEssay = computed(() => {
         const cleanedCommentQuote = comment.quote.replace(/(['])/g, '&rsquo;');
         // Create a regular expression pattern to match the cleaned comment quote, ignoring HTML tags and special characters
         const regexPattern = new RegExp(`(?![^<>]*>)${cleanedCommentQuote}`, 'gi');
-
-        // console.log('Regex pattern:', regexPattern);
-
         essay = essay.replace(regexPattern, spanElement);
     });
     return essay;

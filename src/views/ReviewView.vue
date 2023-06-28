@@ -1,39 +1,39 @@
 <template>
   <!-- <NavAdmin /> This was the UI for picking a prompt-->
 
-  <NavReview />
+  <TopNav />
   <div class="centered">
-    <HeaderReview />
+    <EssayHeader />
   </div>
   <div class="centered">
     <div class="main">
       <div class="left">
-        <StudentsReview />
+        <StudentList />
       </div>
       <div class="middle">
-        <EssayReview />
-        <FeedbackReview />
+        <EssayBody />
+        <OverallFeedback />
       </div>
       <div class="right">
         <StartReview />
-        <CommentsReview />
+        <CommentList />
       </div>
     </div>
   </div>
-  <RubricReview v-show="store.displayRubric" />
+  <RubricModal v-show="store.displayRubric" />
 </template>
 
 <script setup>
 // @ is an alias to /src
-import NavReview from '@/components/review/NavReview.vue'
 import NavAdmin from '@/components/review/NavAdmin.vue'
-import HeaderReview from '@/components/review/HeaderReview.vue'
-import StudentsReview from '@/components/review/StudentsReview.vue'
-import EssayReview from '@/components/review/EssayReview.vue'
-import FeedbackReview from '@/components/review/FeedbackReview.vue'
+import TopNav from '@/components/review/TopNav.vue'
+import EssayHeader from '@/components/review/EssayHeader.vue'
+import StudentList from '@/components/review/StudentList.vue'
+import EssayBody from '@/components/review/EssayBody.vue'
+import OverallFeedback from '@/components/review/OverallFeedback.vue'
 import StartReview from '@/components/review/StartReview.vue'
-import CommentsReview from '@/components/review/CommentsReview.vue'
-import RubricReview from '@/components/review/RubricReview.vue'
+import CommentList from '@/components/review/CommentList.vue'
+import RubricModal from '@/components/review/RubricModal.vue'
 
 import { useMainStore } from '@/stores/store-prompts';
 const store = useMainStore();

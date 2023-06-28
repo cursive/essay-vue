@@ -2,7 +2,7 @@
     <div class="panel">
         <h3>Pre review</h3>
 
-
+        <!-- These two have their visibility toggled by the laoded state in the store  -->
         <div class="instructions preload" v-if="!store.loaded">
             <p>We'll take a first pass at reviewing the essay using the
                 <a href="#" class="showrubric" @click="toggleRubricReview">The Turnitin Common Core State Standards Writing
@@ -29,11 +29,12 @@ const store = useMainStore();
 const loading = ref(false);
 
 
-// Computed property to track the loading state
+// Computed property to track the loading state, TBJ I'm not alwasy super clear about when to sue computed properties
 const loadingComputed = computed(() => {
     return loading.value && !store.loaded;
 });
 
+//Send to openAI
 function handleButtonClick() {
     loading.value = true;
     store.sendToOpenAi();
@@ -41,8 +42,9 @@ function handleButtonClick() {
     button.removeEventListener('click', handleButtonClick);
 }
 
-function toggleRubricReview() {
-    console.log('toggleRubricReview');
+function toggleRubricReview(e) {
+    e.preventDefault();
+    console.log('toggleRubricReview---');
     store.toggleRubric();
 }
 

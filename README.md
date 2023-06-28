@@ -26,6 +26,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - It also lets you inspect the store/state in real time
 
 
+
+## Server
+- pompt-server has both the API and the front-end
+- The front end only works in replit if you build it first, running dev won't work
+- Build the front end on your machine then copy dist into static/public/dist on replit
+- there sued to be a CRUD system for prompts and ruircs but we don't need it anymore
+
+
+
 ## API & Data
 - Prompt lives in a json file
 - We have our own API that we call to send the prompt to OpenAI
@@ -47,6 +56,11 @@ store-pormpt.js keeps the state of the app such as
 - The display status of thew rubric
 - Has the teacher reviews all the comments and feedback
 - Has the response come in from OpenAI
+
+## Some jargon
+- Computed and ref are two ways vue creates reactive content, I'm not alwaays sure which to use
+- comments.quote, highlight are for the line by line feedback
+- overrallFeedback, Feedbacks are for the overall feedback
 
 ## Main Views
 ReviewView the main essay
@@ -83,6 +97,7 @@ Static vues:
 - CommentsReview.vue loops through comments to create individual CommentReview.vue for each vue
 - EssayReview.vue looops thourgh the comments and highleghts the relevant text in the essay
 - FeedbackReview.vue loops through the feedback to list out the overall feedback, 1 per rubric dimension
+- I removed the tap to to edit rext on the comment bubble as it's a little buggy (line 15)
 
 By and large we use the statre to manage everything
 - The feedback and comment items have different CSS classes to reflect their editing/approved state

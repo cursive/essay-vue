@@ -1,9 +1,11 @@
-// prompts.js (store)
+// This file manages the state and data for the essay review page.
 
 
 import { defineStore } from 'pinia';
 console.log("review")
-//const essayData = "In Paul Bogard's article “Let there be dark” he's building an arguement to persuade his audience to preserve natural darkness. Bogard builds his arguement in a few different ways. Bogard uses a personal story, appeals to people's emotions, and states benefits of natural darkness. By using a personal story Bogard allows his audience to connect to him. If his audience can relate or even understand his story they will be more willing to agree with him. The personal story also shows that the issue of preserving natural darkness isn't just another topic to write about but something that he is actually passionate for. In his personal story Bogard uses great imagery making the audience picture what he saw and maybe make them want to experience it too. \n\nBogard uses pathos by stating examples that appeal to people's emotions. In the article he wrote “Those of us over 35 are perhaps among the last generation to have known truly dark nights.” This statement appeals more to the younger generations emotion. By stating this people who are younger then 35 might feel that they were robbed of the oppurtunity to experience the real beauty of natural darkness. This would proably help his younger audience to agree with him because they might want the chance to see the real beauty of natural darkness.\n\nBogard writes about the benefits that natural darkness actually produces. In the article he talks about how darkens actually helps the body produce a hormone that keeps certain cancers from developing. He also includes how darkness helps and is neccessary for certain animals. These examples will help his audience see that he is arguing for some benefical for people. This also helps appeal to an audience that might not care for the beauty of darkness but care for their own personal health. \n\nBogard uses different features in order to persuade his audience. The different features also help him in appealing to a broader audience."
+
+
+// Tidy up essay daya
 const essayData = `If someone in your family has a disease like cancer, heart conditions, and AIDS they may have to suffer pain and change their lifestyle. But they only are alive because of medicine. Back when medicine and vaccines weren’t invented or that advanced, diseases like Polio, Malaria, Asthma, etc., killed many people. Even getting a cold or fever could kill you. Nowadays all the medicines save many lives, but they are killing, too. 
 
 All these vaccines weren’t tested on other humans, but on animals. Everything from mice to polar bears, new ways of saving people are tested first on animals. Animals that can’t speak or argue about us humans killing them. They have no say in living or dying. On average 20 million animals are killed through this testing. Many of them don’t get pain killers when they are slammed on the head, or get their legs chopped to see if they can adapt. 
@@ -12,18 +14,22 @@ That’s because a painkiller can affect the research and can mess up the reacti
 
 We should work toward ways to decrease animal testing and find other ways that don’t involve such pain and killing. It should be worked out so that a company can use only a certain number of animals a year. Also, we could use a computer program that acts just like an animal with all of it’s behaviors and reactions. If it gives bad results, they can keep working until it says it’s ok. When that is done, they could use only a few animals to see if it worked. This would reduce the chance of animals getting killed. `
 
-import promptData from '@/assets/data/promptData.json';
-console.log("promptData------", promptData)
 let htmlData = essayData;
 htmlData = htmlData.replace(/\n/g, '</p><p>');
 htmlData = `<p>${htmlData}</p>`;
 
 console.log("htmlData\n", htmlData)
 
+// Import prompt from jsons
+import promptData from '@/assets/data/promptData.json';
+console.log("promptData------", promptData)
+
 function generateUniqueID() {
     return Math.floor(Math.random() * Date.now());
 }
 
+
+//Handle base URK based on localhost or web hosting
 let baseURL = '';
 
 if (window.location.hostname === 'localhost') {
@@ -31,16 +37,21 @@ if (window.location.hostname === 'localhost') {
 } else {
     baseURL = "/";
 }
+
+
+//The store
+//Feedback is the voerall feedback
+
 export const useMainStore = defineStore('promptStore', {
     state: () => ({
         essay: htmlData,
-        feedbacks: [],
-        comments: [],
-        prompts: promptData,
-        activePrompt: 0,
-        loaded: false,
-        displayRubric: false,
-        isReviewed: false
+        feedbacks: [],//overall feedback
+        comments: [],//comments feedback
+        prompts: promptData,//prompt we send to openai
+        activePrompt: 0,//we only use one prompt, not needed anymore
+        loaded: false,//has the response from openAI been loaded
+        displayRubric: false,//Is the rubric modal open
+        isReviewed: false//has the teacher reviewed all the comments and feedbacks
     }),
     getters: {
         getEssay: (state) => state.essay,
@@ -97,7 +108,7 @@ export const useMainStore = defineStore('promptStore', {
     },
 });
 
-
+//parse the data we get back from openAI and add each comment and voerall feedback to the state
 function cleanupData(data) {
     console.log("cleanupData:", data);
     let targeted = [];
@@ -107,13 +118,10 @@ function cleanupData(data) {
 
         const targetedIndex = content.indexOf("targetedFeedback");
         const overallIndex = content.indexOf("overallFeedback");
-
         const targetedStartIndex = content.indexOf("[", targetedIndex);
         const targetedEndIndex = content.indexOf("]", targetedStartIndex);
-
         const overallStartIndex = content.indexOf("[", overallIndex);
         const overallEndIndex = content.indexOf("]", overallStartIndex);
-
         if (targetedStartIndex !== -1 && targetedEndIndex !== -1) {
             const targetedContent = content.slice(targetedStartIndex, targetedEndIndex + 1);
             targeted = JSON.parse(targetedContent);
@@ -132,6 +140,7 @@ function cleanupData(data) {
             ...comment,
             isApproved: false,
             isRejected: false,
+            isEditng: false,
             isHovering: false
         }));
         console.log("overall feedback:", overall);
